@@ -21,23 +21,33 @@
             v-for="searchResult in mapboxSearchResults"
             :key="searchResult.id"
             class="py-2 cursor-pointer"
+            @click="previewCity(searchResult)"
           >
             {{ searchResult.place_name }}
           </li></template
         >
       </ul>
     </div>
+    <div class="flex flex-col gap-4">
+      <Suspense
+        ><CitiesList /><template #fallback><CityCardSkeleton /></template
+      ></Suspense>
+    </div>
   </main>
 </template>
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+import CitiesList from "@/components/CitiesList.vue";
+import CityCardSkeleton from "@/components/CityCardSkeleton.vue";
 const searchValue = ref("");
 const searchTimeout = ref(null);
 const mapboxAPIKey =
   "pk.eyJ1Ijoiam9obmtvbWFybmlja2kiLCJhIjoiY2t5NjFzODZvMHJkaDJ1bWx6OGVieGxreSJ9.IpojdT3U3NENknF6_WhR2Q";
 const mapboxSearchResults = ref(null);
 const searchError = ref(null);
+const router = useRouter();
 const getSearchResults = () => {
   clearTimeout(searchTimeout.value);
   searchTimeout.value = setTimeout(async () => {
@@ -54,5 +64,20 @@ const getSearchResults = () => {
     }
     mapboxSearchResults.value = null;
   }, 300);
+};
+const previewCity = (searchResult) => {
+  const [city, state] = searchResult.place_name.split(",");
+  router.push({
+    name: "city",
+    params: {
+      state: state.replaceAll(" ", ""),
+      city: city,
+    },
+    query: {
+      lng: searchResult.geometry.coordinates[0],
+      lat: searchResult.geometry.coordinates[1],
+      preview: true,
+    },
+  });
 };
 </script>

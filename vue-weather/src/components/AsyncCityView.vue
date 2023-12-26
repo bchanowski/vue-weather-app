@@ -38,7 +38,7 @@
       <img
         class="w-[150px] h-auto"
         :src="`http://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}@2x.png`"
-        alt=""
+        :alt="`${weatherData.current.weather[0].description}`"
       />
     </div>
     <div class="max-w-screen-md w-full py-12">
@@ -60,7 +60,7 @@
             <img
               class="w-auto h-[50px] object-cover"
               :src="`http://openweathermap.org/img/wn/${hourData.weather[0].icon}@2x.png`"
-              alt=""
+              :alt="`${hourData.weather[0].description}`"
             />
             <p class="text-xl">{{ Math.round(hourData.temp) }}&deg;</p>
           </div>
@@ -86,7 +86,7 @@
           <img
             class="w-[50px] h-[50px] object-cover"
             :src="`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`"
-            alt=""
+            :alt="`${day.weather[0].description}`"
           />
           <div class="flex gap-2 flex-1 justify-end">
             <p>H: {{ Math.round(day.temp.max) }}&deg;</p>
